@@ -1,92 +1,53 @@
 #include <stdio.h>
 
 int main() {
-    const int NUM_EMPRESAS = 5;
-    const int PRESUPUESTO_MINIMO = 100;
-    float presupuesto, cotizacion1, cotizacion2, cotizacion3, cotizacion4, cotizacion5;
-    float cotizacionMenor, cotizacionMayor, sumaTotal, promedio;
+    float presupuesto;
+    float cotizaciones[5], suma = 0, promedio;
+    float cotizacion_minima = 1000000.0; 
+    float cotizacion_maxima = 0.0;      
+    int indice_min = -1, indice_max = -1;
 
-    printf("Ingrese el presupuesto para la construccion de la carretera: ");
+    printf("Ingrese el presupuesto: ");
     scanf("%f", &presupuesto);
 
-    while (presupuesto < PRESUPUESTO_MINIMO) {
-        printf("El presupuesto debe ser mayor o igual a %d. Ingrese de nuevo: ", PRESUPUESTO_MINIMO);
-        scanf("%f", &presupuesto);
+    if (presupuesto <= 0) {
+        printf("El presupuesto debe ser mayor que cero. Fin del programa.\n");
+        return 1; 
     }
 
-    printf("Ingrese la primera cotizacion (minimo %d): ", PRESUPUESTO_MINIMO);
-    scanf("%f", &cotizacion1);
-    while (cotizacion1 < PRESUPUESTO_MINIMO) {
-        printf("La cotizacion debe ser mayor o igual a %d. Ingrese de nuevo: ", PRESUPUESTO_MINIMO);
-        scanf("%f", &cotizacion1);
+    for (int i = 0; i < 5; i++) {
+        do {
+            printf("Ingrese la cotizacion de la empresa %d (debe ser al menos 100): ", i + 1);
+            scanf("%f", &cotizaciones[i]);
+
+            if (cotizaciones[i] < 100) {
+                printf("Error: La cotizacion debe ser al menos 100.\n");
+            }
+        } while (cotizaciones[i] < 100); 
+
+        if (cotizaciones[i] < cotizacion_minima) {
+            cotizacion_minima = cotizaciones[i];
+            indice_min = i;
+        }
+        if (cotizaciones[i] > cotizacion_maxima) {
+            cotizacion_maxima = cotizaciones[i];
+            indice_max = i;
+        }
     }
 
-    printf("Ingrese la segunda cotizacion (minimo %d): ", PRESUPUESTO_MINIMO);
-    scanf("%f", &cotizacion2);
-    while (cotizacion2 < PRESUPUESTO_MINIMO) {
-        printf("La cotizacion debe ser mayor o igual a %d. Ingrese de nuevo: ", PRESUPUESTO_MINIMO);
-        scanf("%f", &cotizacion2);
+    printf("Cotizacion mas baja eliminada: %.2f\n", cotizaciones[indice_min]);
+    printf("Cotizacion mas alta eliminada: %.2f\n", cotizaciones[indice_max]);
+
+    for (int i = 0; i < 5; i++) {
+        if (i != indice_min && i != indice_max) {
+            suma += cotizaciones[i];
+        }
     }
 
-    printf("Ingrese la tercera cotizacion (minimo %d): ", PRESUPUESTO_MINIMO);
-    scanf("%f", &cotizacion3);
-    while (cotizacion3 < PRESUPUESTO_MINIMO) {
-        printf("La cotizacion debe ser mayor o igual a %d. Ingrese de nuevo: ", PRESUPUESTO_MINIMO);
-        scanf("%f", &cotizacion3);
-    }
+    promedio = suma / 3.0;
 
-    printf("Ingrese la cuarta cotizacion (minimo %d): ", PRESUPUESTO_MINIMO);
-    scanf("%f", &cotizacion4);
-    while (cotizacion4 < PRESUPUESTO_MINIMO) {
-        printf("La cotizacion debe ser mayor o igual a %d. Ingrese de nuevo: ", PRESUPUESTO_MINIMO);
-        scanf("%f", &cotizacion4);
-    }
-
-    printf("Ingrese la quinta cotizacion (minimo %d): ", PRESUPUESTO_MINIMO);
-    scanf("%f", &cotizacion5);
-    while (cotizacion5 < PRESUPUESTO_MINIMO) {
-        printf("La cotizacion debe ser mayor o igual a %d. Ingrese de nuevo: ", PRESUPUESTO_MINIMO);
-        scanf("%f", &cotizacion5);
-    }
-
-    cotizacionMenor = cotizacion1;
-    cotizacionMayor = cotizacion1;
-
-    if (cotizacion2 < cotizacionMenor) {
-        cotizacionMenor = cotizacion2;
-    }
-    if (cotizacion2 > cotizacionMayor) {
-        cotizacionMayor = cotizacion2;
-    }
-
-    if (cotizacion3 < cotizacionMenor) {
-        cotizacionMenor = cotizacion3;
-    }
-    if (cotizacion3 > cotizacionMayor) {
-        cotizacionMayor = cotizacion3;
-    }
-
-    if (cotizacion4 < cotizacionMenor) {
-        cotizacionMenor = cotizacion4;
-    }
-    if (cotizacion4 > cotizacionMayor) {
-        cotizacionMayor = cotizacion4;
-    }
-
-    if (cotizacion5 < cotizacionMenor) {
-        cotizacionMenor = cotizacion5;
-    }
-    if (cotizacion5 > cotizacionMayor) {
-        cotizacionMayor = cotizacion5;
-    }
-
-    printf("Se descarta la cotizacion más baja: %.2f\n", cotizacionMenor);
-    printf("Se descarta la cotizacion más alta: %.2f\n", cotizacionMayor);
-
-    sumaTotal = cotizacion1 + cotizacion2 + cotizacion3 + cotizacion4 + cotizacion5;
-    promedio = (sumaTotal - cotizacionMenor - cotizacionMayor) / (NUM_EMPRESAS - 2);
-
-    printf("El promedio de las cotizaciones restantes es: %.2f\n", promedio);
+    printf("Promedio de las cotizaciones restantes: %.2f\n", promedio);
 
     return 0;
 }
+
